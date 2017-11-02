@@ -21,15 +21,16 @@ let client = github.client();
 client.get("/repos/BenceBertalan/nodejstesting/commits",function(err, status, body, headers){
     if(fs.existsSync(lastcommitfile_path)){    
     let lastcommitfile = JSON.parse(fs.readFileSync(lastcommitfile_path,"utf8"))        
-    lastcommit = body.find(o => o.sha === lastcommitfile.sha)
-    if(lastcommit == null){
-    github_lastcommit = body.sort(sortFunction)[0]        
+    lastcommit_sorted = body.sort(sortFunction)[0]
+    //console.log(lastcommit_sorted)
+    if(lastcommit_sorted.sha != lastcommitfile.sha){
+    github_lastcommit = lastcommit_sorted        
     }    
 }else{
     github_lastcommit = body.sort(sortFunction)[0]
     }
     if(github_lastcommit != null){
-    console.log("There's a new commit by " + github_lastcommit.commit.author.name + " on " + github_lastcommit.commit.author.date + ":" + github_lastcommit.commit.message)
+    console.log("There's a new commit by " + github_lastcommit.commit.author.name + " on " + github_lastcommit.commit.author.date + " : " + github_lastcommit.commit.message)
     fs.writeFileSync(lastcommitfile_path,JSON.stringify(github_lastcommit))
     return true;
     }else{
