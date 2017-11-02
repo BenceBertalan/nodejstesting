@@ -1,4 +1,4 @@
-//let git = require("nodegit");
+let git = require("nodegit");
 let fs = require('file-system');
 let http = require("https")
 let github = require("octonode");
@@ -29,10 +29,11 @@ client.get("/repos/BenceBertalan/nodejstesting/commits",function(err, status, bo
     github_lastcommit = body.sort(sortFunction)[0]
     }
     if(github_lastcommit != null){
-    console.log("There's a new commit by " + lastcommit.commit.author.name + " on " + lastcommit.commit.author.date + ":" + lastcommit.commit.message)
-    fs.writeFileSync(lastcommitfile_path,JSON.stringify(lastcommit))
+    console.log("There's a new commit by " + github_lastcommit.commit.author.name + " on " + github_lastcommit.commit.author.date + ":" + github_lastcommit.commit.message)
+    fs.writeFileSync(lastcommitfile_path,JSON.stringify(github_lastcommit))
     return true;
     }else{
+    console.log("There is no new version.")
         return false;
     }
 })

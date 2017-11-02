@@ -9,7 +9,7 @@
             "type": "node",
             "request": "launch",
             "name": "Launch Program",
-            "program": "${workspaceFolder}/dockerimagegen/\\index.js"
+            "program": "${workspaceFolder}/dockergen/\\app.js"
         }
     ]
 }
