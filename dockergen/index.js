@@ -3,8 +3,13 @@ let fs = require('file-system');
 let http = require("https")
 let github = require("octonode");
 let process = require("shelljs")
-let clone_path = __dirname + "/cloned_repo"
+///
+let clone_dir = "cloned_repo"
+let clone_path = __dirname + "/" + clone_dir
 let repourl = 'https://github.com/BenceBertalan/DockerTestRepo.git'
+let reponame = 'DockerTestRepo'
+let containertag = 'bencebertalan/nodetest'
+let containerport = '9001:9001'
 
 
 function sortFunction(a,b){  
@@ -36,23 +41,36 @@ client.get("/repos/BenceBertalan/DockerTestRepo/commits",function(err, status, b
     console.log("There's a new commit by " + github_lastcommit.commit.author.name + " on " + github_lastcommit.commit.author.date + " : " + github_lastcommit.commit.message)
     fs.writeFileSync(lastcommitfile_path,JSON.stringify(github_lastcommit))
     checkstatus = true
+    DeployNewContainer(checkstatus)
     }else{
     console.log("There is no new version.")
     }
-    if(checkstatus == true){
-        console.log("Creating New image....")
-        console.log("... Cloning Git Repo....")
-        if (fs.existsSync(clone_path)){
-            fs.rmdirSync(clone_path);
-            fs.mkdirSync(clone_path);
-        }
-        git.Clone(repourl,clone_path)
-        if()
-
-        }
+    
 })
 return checkstatus
 }
 var check = CheckLastCommit()
 
 
+function DeployNewContainer(checkstatus){
+if(checkstatus == true){
+    console.log("Creating New image....")
+    console.log("... Cloning Git Repo....")
+    if (fs.existsSync(clone_path)){
+        fs.rmdirSync(clone_path);
+        fs.mkdirSync(clone_path);
+    }
+    git.Clone(repourl,clone_path)
+    console.log("Checking if dockerfile is in place")
+    var Dockerfile_path = clone_path + "/Dockerfile";
+    var Dockerfile_exists = fs.existsSync(Dockerfile_path)
+    if(Dockerfile_exists)
+    {
+      var buildresult = process.exec("docker","build -t " + containertag + " " + clone_dir + "/").stdout
+      console.log(buildresult);
+      var runresult = process.exec("docker","run -d -p " + containerport + " " + containertag).stdout
+    }
+
+
+    }
+}

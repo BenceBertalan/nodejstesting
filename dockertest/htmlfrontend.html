@@ -1,0 +1,17 @@
+<html>
+<body>
+
+<form action="/myapp/newuser" method="post">
+    <textarea name="username" placeholder="New User Name"></textarea>
+    <textarea name="message" placeholder="New User message"></textarea>
+    <input class="submit" type="submit">
+    <h1>Our Messages:</h1>
+    <h2 id="lastupdated"></h2>
+    <hr>
+    <div id="user" class="users">
+    </div>
+    
+<script src="./loadmessages.js"></script>
+</form>
+</body>
+</html>
