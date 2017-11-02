@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "file-system": "^2.2.2",
+    "https": "^1.0.0",
     "nodegit": "^0.20.3",
     "octonode": "^0.8.0",
     "shelljs": "^0.7.8"
