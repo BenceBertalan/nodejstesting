@@ -2,8 +2,10 @@ let git = require("nodegit");
 let fs = require('file-system');
 let http = require("https")
 let github = require("octonode");
+let process = require("shelljs")
 let clone_path = __dirname + "/cloned_repo"
-let repourl = 'https://github.com/BenceBertalan/nodejstesting.git'
+let repourl = 'https://github.com/BenceBertalan/DockerTestRepo.git'
+
 
 function sortFunction(a,b){  
     var dateA = new Date(a.commit.committer.date).getTime();
@@ -11,14 +13,14 @@ function sortFunction(a,b){
     return dateA > dateB ? 1 : -1;  
 }; 
 
-  function CheckLastCommit(){
+function CheckLastCommit(){
 
 var lastcommitfile_path = __dirname + "/lastcommit.json";
 var lastcommit
 var github_lastcommit
 
 let client = github.client();
-client.get("/repos/BenceBertalan/nodejstesting/commits",function(err, status, body, headers){
+client.get("/repos/BenceBertalan/DockerTestRepo/commits",function(err, status, body, headers){
     if(fs.existsSync(lastcommitfile_path)){    
     let lastcommitfile = JSON.parse(fs.readFileSync(lastcommitfile_path,"utf8"))        
     lastcommit_sorted = body.sort(sortFunction)[0]
@@ -41,17 +43,15 @@ client.get("/repos/BenceBertalan/nodejstesting/commits",function(err, status, bo
 
 }
 
-CheckLastCommit()
-
 function BuildNewContainer(){
-
-if (fs.existsSync(path)) {
+if (fs.existsSync(clone_path)) {
     fs.rmdirSync(clone_path);
     fs.mkdirSync(clone_path);
 }
-
-
-
-//git.Clone('https://github.com/BenceBertalan/nodejstesting.git',)
+if(CheckLastCommit()){
+git.Clone('https://github.com/BenceBertalan/nodejstesting.git',clone_path)
+}
 
 }
+
+BuildNewContainer()
