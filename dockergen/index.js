@@ -18,6 +18,7 @@ function CheckLastCommit(){
 var lastcommitfile_path = __dirname + "/lastcommit.json";
 var lastcommit
 var github_lastcommit
+var checkstatus = false
 
 let client = github.client();
 client.get("/repos/BenceBertalan/DockerTestRepo/commits",function(err, status, body, headers){
@@ -34,24 +35,24 @@ client.get("/repos/BenceBertalan/DockerTestRepo/commits",function(err, status, b
     if(github_lastcommit != null){
     console.log("There's a new commit by " + github_lastcommit.commit.author.name + " on " + github_lastcommit.commit.author.date + " : " + github_lastcommit.commit.message)
     fs.writeFileSync(lastcommitfile_path,JSON.stringify(github_lastcommit))
-    return true;
+    checkstatus = true
     }else{
     console.log("There is no new version.")
-        return false;
     }
+    if(checkstatus == true){
+        console.log("Creating New image....")
+        console.log("... Cloning Git Repo....")
+        if (fs.existsSync(clone_path)){
+            fs.rmdirSync(clone_path);
+            fs.mkdirSync(clone_path);
+        }
+        git.Clone(repourl,clone_path)
+        if()
+
+        }
 })
-
+return checkstatus
 }
+var check = CheckLastCommit()
 
-function BuildNewContainer(){
-if (fs.existsSync(clone_path)) {
-    fs.rmdirSync(clone_path);
-    fs.mkdirSync(clone_path);
-}
-if(CheckLastCommit()){
-git.Clone('https://github.com/BenceBertalan/nodejstesting.git',clone_path)
-}
 
-}
-
-BuildNewContainer()
