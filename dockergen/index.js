@@ -4,7 +4,7 @@ var http = require("https")
 var github = require("octonode");
 var process = require("shelljs")
 ///
-var gitaccesstoken = "18503ff366feb15537dc2370c82af3a6aa53222e"
+var gitaccesstoken = "6385a19e69a635ff463ecb07048db5f0b7efacfc "
 var clone_dir = "cloned_repo"
 var clone_path = __dirname + "/" + clone_dir
 var reponame = 'DockerTestRepo'
